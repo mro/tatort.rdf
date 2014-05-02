@@ -25,3 +25,15 @@ No fancy script language, no database, no json.
 ## Debian
 
     $ sudo apt-get install xsltproc raptor2-utils rasqal-utils
+
+# Example [SPARQL](http://www.w3.org/TR/sparql11-query/#basicpatterns) queries
+
+## Count all movies per kommissar
+
+    $ roqet htdocs/examples/kommissar.rq --results csv
+
+## Count all actor appearances with character name
+
+Expect loooong execution times (several minutes).
+
+    $ roqet htdocs/examples/actor.rq --results csv
