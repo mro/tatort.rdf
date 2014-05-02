@@ -6,7 +6,7 @@ and turn it into RDF.
 
 Just run
 
-    $ sh index.sh
+    $ sh bin/index.sh
 
 and find 3 rdf files in `htdocs`.
 

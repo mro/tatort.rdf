@@ -69,19 +69,19 @@
 
       <xsl:for-each select=".//select[@id='filterBoxGroup']//option[position() &gt; 1]">
         <dctype:Text rdf:about="../kommissare/{@value}.html">
-        	<xsl:variable name="s0">
-        		<xsl:choose>
-        			<xsl:when test="substring-before(.,'(') != ''">
-        				<xsl:value-of select="substring-before(.,'(')"/>
-        			</xsl:when>
-        			<xsl:otherwise>
-        				<xsl:value-of select="."/>
-        			</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:variable>
-        	<xsl:for-each select="str:split(str:replace(str:replace($s0,'und',','),'sowie',','),',')">
-        		<dc:subject><xsl:value-of select="normalize-space(.)"/></dc:subject>
-        	</xsl:for-each>
+          <xsl:variable name="s0">
+            <xsl:choose>
+              <xsl:when test="substring-before(.,'(') != ''">
+                <xsl:value-of select="substring-before(.,'(')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="."/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:for-each select="str:split(str:replace(str:replace($s0,'und',','),'sowie',','),',')">
+            <dc:subject><xsl:value-of select="normalize-space(.)"/></dc:subject>
+          </xsl:for-each>
           <dcterms:identifier><xsl:value-of select="@value"/></dcterms:identifier>
           <dcterms:title xml:lang="de"><xsl:value-of select="."/></dcterms:title>
           <dcterms:references rdf:resource="../kommissare/{@value}~_show-overviewBroadcasts.html"/>

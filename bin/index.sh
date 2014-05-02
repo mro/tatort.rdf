@@ -31,15 +31,15 @@ which rapper >/dev/null 2>&1 || { echo "rapper (raptor2-utils) is not installed.
 which roqet >/dev/null 2>&1 || { echo "roqet (rasqal-utils) is not installed." && exit 1; }
 
 # result filename basenames
-dst_index="htdocs/$(basename "$0" .sh)"
-dst_episode="htdocs/episodes"
-dst_kommissar="htdocs/kommissare"
-dst_schedule="htdocs/schedule"
+dst_index="../htdocs/$(basename "$0" .sh)"
+dst_episode="../htdocs/episodes"
+dst_kommissar="../htdocs/kommissare"
+dst_schedule="../htdocs/schedule"
 
 # tmp directories
-cache_episode="cache/episode"
-cache_kommissar="cache/kommissar"
-cache_schedule="cache/schedule"
+cache_episode="../cache/episode"
+cache_kommissar="../cache/kommissar"
+cache_schedule="../cache/schedule"
 
 
 ##########################################################
