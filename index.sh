@@ -47,7 +47,7 @@ cache_schedule="cache/schedule"
 ##########################################################
 
 mkdir -p "$(dirname "$dst_index")" 2>/dev/null
-echo xsltproc --html --output "$dst_index".rdf "$dst_index".xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html
+echo xsltproc --html --output "$dst_index".rdf index.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html
 xsltproc --html --output "$dst_index".rdf index.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html 2> /dev/null
 
 
@@ -89,7 +89,8 @@ cat "$cache_episode"/*.ttl > "$dst_episode".ttl~ \
 ## scrape detetives <-> episode relations (only if needed)
 ##########################################################
 
-if [ $(roqet episodes-without-kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_episode".rdf --data "$dst_kommissar".rdf | tr -d \\r | wc -l) -gt 1 ] ; then
+if [ ! -f "$dst_kommissar".rdf ] || [ $(roqet episodes-without-kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_episode".rdf --data "$dst_kommissar".rdf | tr -d \\r | wc -l) -gt 1 ]
+then
   mkdir -p "$cache_kommissar" 2>/dev/null
   rm "$cache_kommissar"/*
   roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_index".rdf | tr -d \\r | tail -n +2 | while read komm_id
