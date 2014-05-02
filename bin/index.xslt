@@ -79,7 +79,7 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <xsl:for-each select="str:split(str:replace(str:replace($s0,'und',','),'sowie',','),',')">
+          <xsl:for-each select="str:split(str:replace(str:replace(str:replace($s0, ' und ', ','), ' sowie ', ','), ' mit ', ','),',')">
             <dc:subject><xsl:value-of select="normalize-space(.)"/></dc:subject>
           </xsl:for-each>
           <dcterms:identifier><xsl:value-of select="@value"/></dcterms:identifier>
