@@ -28,12 +28,12 @@ No fancy script language, no database, no json.
 
 # Example [SPARQL](http://www.w3.org/TR/sparql11-query/#basicpatterns) queries
 
-## Count all movies per kommissar
+## Movies per kommissar
 
-    $ roqet htdocs/examples/kommissar.rq --results csv
+    $ roqet http://tatort.rdf.mro.name/examples/kommissare.rq --results csv
 
-## Count all actor appearances with character name
+## Actor appearances with character name
 
-Expect loooong execution times (several minutes).
+Expect loooong execution time (several minutes).
 
-    $ roqet htdocs/examples/actor.rq --results csv
+    $ roqet http://tatort.rdf.mro.name/examples/actor.rq --results csv
