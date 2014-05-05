@@ -44,7 +44,7 @@ PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
 SELECT
   (COUNT(?movie_url) AS ?movie_count)
   ?kommissar_name
-FROM  <../index.rdf>
+FROM  <../overview.rdf>
 FROM  <../kommissare.rdf>
 WHERE {
   ?team_url

@@ -30,25 +30,28 @@ which xsltproc >/dev/null 2>&1 || { echo "xsltproc is not installed." && exit 1;
 which rapper >/dev/null 2>&1 || { echo "rapper (raptor2-utils) is not installed." && exit 1; }
 which roqet >/dev/null 2>&1 || { echo "roqet (rasqal-utils) is not installed." && exit 1; }
 
+www_root="../htdocs"
+cache_root="../cache"
+
 # result filename basenames
-dst_index="../htdocs/$(basename "$0" .sh)"
-dst_episode="../htdocs/episodes"
-dst_kommissar="../htdocs/kommissare"
-dst_schedule="../htdocs/schedule"
+dst_overview="$www_root/overview"
+dst_episode="$www_root/episodes"
+dst_kommissar="$www_root/kommissare"
+dst_schedule="$www_root/schedule"
 
 # tmp directories
-cache_episode="../cache/episode"
-cache_kommissar="../cache/kommissar"
-cache_schedule="../cache/schedule"
+cache_episode="$cache_root/episode"
+cache_kommissar="$cache_root/kommissar"
+cache_schedule="$cache_root/schedule"
 
 
 ##########################################################
 ## scrape episode list
 ##########################################################
 
-mkdir -p "$(dirname "$dst_index")" 2>/dev/null
-echo xsltproc --html --output "$dst_index".rdf index.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html
-xsltproc --html --output "$dst_index".rdf index.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html 2> /dev/null
+mkdir -p "$(dirname "$dst_overview")" 2>/dev/null
+echo xsltproc --html --output "$dst_overview".rdf overview.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html
+xsltproc --html --output "$dst_overview".rdf overview.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html 2> /dev/null
 
 
 ##########################################################
@@ -56,7 +59,7 @@ xsltproc --html --output "$dst_index".rdf index.xslt http://www.daserste.de/unte
 ##########################################################
 
 mkdir -p "$cache_episode" 2>/dev/null
-roqet episode.rq --results csv --input sparql --format rdfxml --data "$dst_index".rdf | tr -d \\r | tail -n +2 | while read line
+roqet episode.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read line
 do
   episode_num=$(echo $line | cut -d , -f1)
   episode_url=$(echo $line | cut -d , -f2)
@@ -93,7 +96,7 @@ if [ ! -f "$dst_kommissar".rdf ] || [ $(roqet episodes-without-kommissar.rq --re
 then
   mkdir -p "$cache_kommissar" 2>/dev/null
   rm "$cache_kommissar"/*
-  roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_index".rdf | tr -d \\r | tail -n +2 | while read komm_id
+  roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read komm_id
   do
     komm_url="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/$komm_id~_show-overviewBroadcasts.html"
     komm_file="$cache_kommissar/$komm_id"
