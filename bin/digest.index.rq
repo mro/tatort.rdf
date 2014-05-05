@@ -1,0 +1,96 @@
+#
+# Copyright (c) 2013-2014, Marcus Rohrmoser mobile Software
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification, are permitted
+# provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this list of conditions
+#    and the following disclaimer.
+#
+# 2. The software must not be used for military or intelligence or related purposes nor
+#    anything that's in conflict with human rights as declared in http://www.un.org/en/documents/udhr/ .
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+# FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+# THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+# Aggregate data for display - essentially merge and strip cast & crew.
+#
+# Run:
+#
+# $ roqet bin/digest.index.rq --results rdfxml-abbrev
+#
+#
+# http://www.w3.org/TR/sparql11-query/#basicpatterns
+#
+# Install roqet (http://librdf.org/rasqal/roqet.html):
+#
+# $ brew install rasqal
+# $ sudo apt-get install rasqal-utils
+#
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dctype: <http://purl.org/dc/dcmitype/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX taep: <http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#>
+# PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+# PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
+
+CONSTRUCT {
+  ?teap_url
+    a                   dctype:MovingImage ;
+    dcterms:source      ?epi_url_year ;
+    dcterms:alternative ?num ;
+    dcterms:title       ?title ;
+    dcterms:issued      ?issued ;
+    dcterms:abstract    ?abstract ;
+    dcterms:description ?description ;
+    dcterms:isPartOf    ?team_url ;
+    dcterms:references  ?image .
+  ?image
+    a                   dctype:StillImage ;
+    dcterms:isReferencedBy ?teap_url .
+  ?epi_url_year
+    a                   dctype:Text ;
+    owl:sameAs          ?epi_url .
+  ?team_url
+    a                   dctype:Text ;
+    dcterms:hasPart     ?teap_url ;
+    dcterms:title       ?team_title ;
+    dc:subject          ?kommissar .
+}
+FROM  <../htdocs/overview.rdf>
+FROM  <../htdocs/kommissare.rdf>
+FROM  <../htdocs/episodes.rdf>
+WHERE {
+  ?epi_url_year
+    owl:sameAs          ?epi_url .
+  ?epi_url
+    a                   dctype:Text ;
+    dcterms:abstract    ?abstract ;
+    dcterms:description ?description ;
+    dcterms:references  ?image .
+  ?image
+    a                   dctype:StillImage .
+  ?team_url
+    a                   dctype:Text ;
+    dcterms:title       ?team_title ;
+    dc:subject          ?kommissar ;
+    dcterms:hasPart     ?epi_url_year .
+  ?teap_url
+    a                   dctype:MovingImage ;
+    dcterms:issued      ?issued ;
+    dcterms:alternative ?num ;
+    dcterms:source      ?epi_url ;
+    dcterms:title       ?title .
+}
+ORDER BY
+  DESC(?num)
