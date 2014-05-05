@@ -24,5 +24,19 @@
 
 WWW_ROOT := ../htdocs
 
-$(WWW_ROOT)/index.rdf:	digest.index.rq $(WWW_ROOT)/overview.rdf $(WWW_ROOT)/kommissare.rdf $(WWW_ROOT)/episodes.rdf
-	roqet digest.index.rq --results rdfxml-abbrev > $@
+%.ttl:	%.rdf
+	rapper --quiet --input rdfxml --output turtle $< - > $@
+%.rdf:	%.ttl
+	rapper --quiet --input turtle --output rdfxml-abbrev $< - > $@
+
+$(WWW_ROOT)/index.rdf:	$(WWW_ROOT)/total-no-cast.rdf
+	rapper --quiet --input rdfxml --output rdfxml-abbrev $< - > $@
+
+$(WWW_ROOT)/total-no-cast.rdf: no-cast.xslt $(WWW_ROOT)/total.rdf
+	xsltproc --output $@ $^
+
+$(WWW_ROOT)/total.ttl:	$(WWW_ROOT)/overview.ttl $(WWW_ROOT)/kommissare.ttl $(WWW_ROOT)/episodes.ttl
+	cat $^ > $@
+
+clean:
+	rm $(WWW_ROOT)/*.ttl $(WWW_ROOT)/total* $(WWW_ROOT)/index.*

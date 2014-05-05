@@ -29,6 +29,7 @@ cd "$(dirname "$0")"
 which xsltproc >/dev/null 2>&1 || { echo "xsltproc is not installed." && exit 1; }
 which rapper >/dev/null 2>&1 || { echo "rapper (raptor2-utils) is not installed." && exit 1; }
 which roqet >/dev/null 2>&1 || { echo "roqet (rasqal-utils) is not installed." && exit 1; }
+which make >/dev/null 2>&1 || { echo "make is not installed." && exit 1; }
 
 www_root="../htdocs"
 cache_root="../cache"
@@ -114,3 +115,5 @@ then
   && rapper --input turtle --output rdfxml-abbrev "$dst_kommissar".ttl~ > "$dst_kommissar".rdf \
   && rm "$dst_kommissar".ttl~
 fi
+
+make
