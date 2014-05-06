@@ -117,3 +117,4 @@ then
 fi
 
 make
+rm "$www_root/"*.ttl "$www_root/total"*
