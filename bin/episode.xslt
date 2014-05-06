@@ -139,7 +139,13 @@
           <!-- Crew -->
           <movie:production_company>
             <xsl:variable name="prod_comp" select="//div[contains(@class,'box') and h3[contains(@class,'ressort') and text() = 'Produktion']]//h4[contains(@class,'headline')]"/>
-            <xsl:value-of select="normalize-space(str:replace(str:replace($prod_comp, 'Dieser Film wurde vom', ''), 'produziert.', ''))"/>
+            <xsl:if test="$prod_comp">
+              <foaf:Organization>
+                <foaf:name>
+                  <xsl:value-of select="normalize-space(str:replace(str:replace($prod_comp, 'Dieser Film wurde vom', ''), 'produziert.', ''))"/>
+                </foaf:name>
+              </foaf:Organization>
+            </xsl:if>
           </movie:production_company>
           <xsl:for-each select=".//table[2]//tr[td]">
             <xsl:choose>
