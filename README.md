@@ -18,6 +18,9 @@ see [LICENSE.txt](LICENSE.txt)
 
 No fancy script language, no database, no json.
 
+Just [xsltproc](http://xmlsoft.org/XSLT/xsltproc.html) [rapper](http://librdf.org/raptor/rapper.html)
+and [roqet](http://librdf.org/rasqal/roqet.html)
+
 ## OS X
 
     $ brew install raptor rasqal

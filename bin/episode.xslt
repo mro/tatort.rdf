@@ -46,8 +46,9 @@
     xmlns:tako="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:dyn="http://exslt.org/dynamic"
-    extension-element-prefixes="date dyn"
-    exclude-result-prefixes="xsl date dyn"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="date dyn str"
+    exclude-result-prefixes="xsl date dyn str"
     version="1.0">
   <xsl:output method="xml" indent="yes"/>
 
@@ -136,7 +137,10 @@
           </xsl:for-each>
 
           <!-- Crew -->
-          <movie:production_company><xsl:value-of select="//*[contains(@class,'teaser')]//*[contains(@class,'headline')]"/></movie:production_company>
+          <movie:production_company>
+            <xsl:variable name="prod_comp" select="//div[contains(@class,'box') and h3[contains(@class,'ressort') and text() = 'Produktion']]//h4[contains(@class,'headline')]"/>
+            <xsl:value-of select="normalize-space(str:replace(str:replace($prod_comp, 'Dieser Film wurde vom', ''), 'produziert.', ''))"/>
+          </movie:production_company>
           <xsl:for-each select=".//table[2]//tr[td]">
             <xsl:choose>
               <xsl:when test="td[1] = 'Regie:'">
