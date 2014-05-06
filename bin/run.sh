@@ -73,7 +73,9 @@ do
   fi
 
   echo xsltproc --stringparam episode "$(printf '%04d' $episode_num)" --stringparam base_url "$episode_url" --html --output "$episode_file".rdf episode.xslt "$episode_url"
-  xsltproc --stringparam episode "$(printf '%04d' $episode_num)" --stringparam base_url "$episode_url" --html --output "$episode_file".rdf episode.xslt "$episode_url" 2> /dev/null
+  xsltproc --stringparam episode "$(printf '%04d' $episode_num)" --stringparam base_url "$episode_url" --html --output "$episode_file".rdf episode.xslt "$episode_url" 2> .log~
+  grep "Unknown Crew:" .log~ ; rm .log~
+
   rapper --input rdfxml --output turtle --input-uri "$episode_url" --output-uri - "$episode_file".rdf > "$episode_file".ttl
   rm "$episode_file".rdf
 done

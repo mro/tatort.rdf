@@ -123,13 +123,13 @@
               <movie:performance>
                 <movie:character>
                   <movie:character>
-                    <foaf:name><xsl:value-of select="td[1]"/></foaf:name>
+                    <foaf:name><xsl:value-of select="normalize-space(td[1])"/></foaf:name>
                     <!-- foaf:page rdf:resource="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#kressin"/ -->
                   </movie:character>
                 </movie:character>
                 <movie:actor>
                   <foaf:Person>
-                    <foaf:name><xsl:value-of select="td[2]"/></foaf:name>
+                    <foaf:name><xsl:value-of select="normalize-space(td[2])"/></foaf:name>
                   </foaf:Person>
                 </movie:actor>
               </movie:performance>
@@ -148,41 +148,23 @@
             </xsl:if>
           </movie:production_company>
           <xsl:for-each select=".//table[2]//tr[td]">
-            <xsl:choose>
-              <xsl:when test="td[1] = 'Regie:'">
-                <movie:director>
-                  <foaf:Person>
-                    <foaf:name><xsl:value-of select="td[2]"/></foaf:name>
-                  </foaf:Person>
-                </movie:director>
-              </xsl:when>
-              <xsl:when test="td[1] = 'Buch:'">
-                <movie:story_contributor>
-                  <foaf:Person>
-                    <foaf:name><xsl:value-of select="td[2]"/></foaf:name>
-                  </foaf:Person>
-                </movie:story_contributor>
-              </xsl:when>
-              <xsl:when test="td[1] = 'Kamera:'">
-                <movie:cinematographer>
-                  <foaf:Person>
-                    <foaf:name><xsl:value-of select="td[2]"/></foaf:name>
-                  </foaf:Person>
-                </movie:cinematographer>
-              </xsl:when>
-              <xsl:when test="td[1] = 'Musik:'">
-                <movie:music_contributor>
-                  <foaf:Person>
-                    <foaf:name><xsl:value-of select="td[2]"/></foaf:name>
-                  </foaf:Person>
-                </movie:music_contributor>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:message><xsl:value-of select="td[1]"/></xsl:message>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:variable name="elm_qname">
+              <xsl:choose>
+                <xsl:when test="td[1] = 'Regie:'">director</xsl:when>
+                <xsl:when test="td[1] = 'Buch:'">story_contributor</xsl:when>
+                <xsl:when test="td[1] = 'Kamera:'">cinematographer</xsl:when>
+                <xsl:when test="td[1] = 'Musik:'">music_contributor</xsl:when>
+                <xsl:otherwise><xsl:message>Unknown Crew: <xsl:value-of select="td[1]"/> in <xsl:value-of select="$base_url"/></xsl:message></xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:if test="string-length($elm_qname) &gt; 0">
+              <xsl:for-each select="str:split(str:replace(str:replace(str:replace(td[2], ' und ', ','), ' sowie ', ','), ' mit ', ','),',')">
+                <xsl:element name="{$elm_qname}" namespace="http://data.linkedmdb.org/resource/movie/">
+                  <foaf:Person><foaf:name><xsl:value-of select="normalize-space(.)"/></foaf:name></foaf:Person>
+                </xsl:element>
+              </xsl:for-each>
+            </xsl:if>
           </xsl:for-each>
-
         </xsl:for-each>
       </dctype:Text>
     </rdf:RDF>
