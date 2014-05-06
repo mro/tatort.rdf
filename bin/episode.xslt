@@ -178,7 +178,7 @@
               <xsl:if test="string-length($elm_qname) &gt; 0">
                 <xsl:for-each select="str:split(str:replace(str:replace(str:replace(str:replace(translate($crew_member, '/', ','), ' und ', ','), ' u. ', ','), ' sowie ', ','), ' mit ', ','), ',')">
                   <xsl:element name="movie:{$elm_qname}">
-                    <rdfs:label><xsl:value-of select="$crew_task"/></rdfs:label>
+                    <!-- rdfs:label><xsl:value-of select="$crew_task"/></rdfs:label -->
                     <foaf:Person><foaf:name><xsl:value-of select="normalize-space(.)"/></foaf:name></foaf:Person>
                   </xsl:element>
                 </xsl:for-each>
