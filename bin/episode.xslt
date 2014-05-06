@@ -148,22 +148,38 @@
             </xsl:if>
           </movie:production_company>
           <xsl:for-each select=".//table[2]//tr[td]">
-            <xsl:variable name="elm_qname">
+            <xsl:variable name="crew_task" select="normalize-space(td[1])"/>
+            <xsl:variable name="crew_member" select="normalize-space(td[2])"/>
+            <xsl:variable name="elm_qnames">
               <xsl:choose>
-                <xsl:when test="td[1] = 'Regie:'">director</xsl:when>
-                <xsl:when test="td[1] = 'Buch:'">story_contributor</xsl:when>
-                <xsl:when test="td[1] = 'Kamera:'">cinematographer</xsl:when>
-                <xsl:when test="td[1] = 'Musik:'">music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Regie:'">director</xsl:when>
+                <xsl:when test="$crew_task = 'Buch und Regie:'">director,story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Regie und Musik:'">director,music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Ausstattung: J:'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Ausstattung:'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Szenenbild:'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Schnitt:'">editor</xsl:when>
+                <xsl:when test="$crew_task = 'Autor:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Drehbuch:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Idee:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Buch:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Kamera:'">cinematographer</xsl:when>
+                <xsl:when test="$crew_task = 'Musik:'">music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Produktionsleitung:'">producer</xsl:when>
+                <xsl:when test="$crew_task = 'Kostüme:'">film_costume_designer</xsl:when>
                 <xsl:otherwise><xsl:message>Unknown Crew: <xsl:value-of select="td[1]"/> in <xsl:value-of select="$base_url"/></xsl:message></xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <xsl:if test="string-length($elm_qname) &gt; 0">
-              <xsl:for-each select="str:split(str:replace(str:replace(str:replace(td[2], ' und ', ','), ' sowie ', ','), ' mit ', ','),',')">
-                <xsl:element name="{$elm_qname}" namespace="http://data.linkedmdb.org/resource/movie/">
-                  <foaf:Person><foaf:name><xsl:value-of select="normalize-space(.)"/></foaf:name></foaf:Person>
-                </xsl:element>
+            <xsl:for-each select="str:split($elm_qnames,',')">
+              <xsl:variable name="elm_qname" select="."/>
+              <xsl:if test="string-length($elm_qname) &gt; 0">
+                <xsl:for-each select="str:split(str:replace(str:replace(str:replace($crew_member, ' und ', ','), ' sowie ', ','), ' mit ', ','),',')">
+                  <xsl:element name="{$elm_qname}" namespace="http://data.linkedmdb.org/resource/movie/">
+                    <foaf:Person><foaf:name><xsl:value-of select="normalize-space(.)"/></foaf:name></foaf:Person>
+                  </xsl:element>
+                </xsl:for-each>
+              </xsl:if>
               </xsl:for-each>
-            </xsl:if>
           </xsl:for-each>
         </xsl:for-each>
       </dctype:Text>
