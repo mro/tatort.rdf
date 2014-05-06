@@ -32,6 +32,7 @@
 -->
 <xsl:stylesheet
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -161,7 +162,9 @@
                 <xsl:when test="$crew_task = 'Schnitt:'">editor</xsl:when>
                 <xsl:when test="$crew_task = 'Autor:'">story_contributor</xsl:when>
                 <xsl:when test="$crew_task = 'Drehbuch:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Drehbuchbearbeitung:'">story_contributor</xsl:when>
                 <xsl:when test="$crew_task = 'Idee:'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Buch :'">story_contributor</xsl:when>
                 <xsl:when test="$crew_task = 'Buch:'">story_contributor</xsl:when>
                 <xsl:when test="$crew_task = 'Kamera:'">cinematographer</xsl:when>
                 <xsl:when test="$crew_task = 'Musik:'">music_contributor</xsl:when>
@@ -173,8 +176,9 @@
             <xsl:for-each select="str:split($elm_qnames,',')">
               <xsl:variable name="elm_qname" select="."/>
               <xsl:if test="string-length($elm_qname) &gt; 0">
-                <xsl:for-each select="str:split(str:replace(str:replace(str:replace($crew_member, ' und ', ','), ' sowie ', ','), ' mit ', ','),',')">
-                  <xsl:element name="{$elm_qname}" namespace="http://data.linkedmdb.org/resource/movie/">
+                <xsl:for-each select="str:split(str:replace(str:replace(str:replace(str:replace(translate($crew_member, '/', ','), ' und ', ','), ' u. ', ','), ' sowie ', ','), ' mit ', ','), ',')">
+                  <xsl:element name="movie:{$elm_qname}">
+                    <rdfs:label><xsl:value-of select="$crew_task"/></rdfs:label>
                     <foaf:Person><foaf:name><xsl:value-of select="normalize-space(.)"/></foaf:name></foaf:Person>
                   </xsl:element>
                 </xsl:for-each>
