@@ -40,7 +40,7 @@ PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX dctype: <http://purl.org/dc/dcmitype/>
 PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX dc: <http://purl.org/dc/elements/1.1/>
-PREFIX taep: <http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#>
+PREFIX taep: <http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/#>
 # PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 # PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
 

@@ -25,7 +25,7 @@
   Get all kommissar <-> episode relations.
 
 
-  $ xsltproc -stringparam base_url http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/eisner-100~_show-overviewBroadcasts.html -html -output kommissar/eisner-100.rdf kommissar.xslt http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/eisner-100~_show-overviewBroadcasts.html
+  $ xsltproc -stringparam base_url http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/eisner-100~_show-overviewBroadcasts.html -html -output kommissar/eisner-100.rdf kommissar.xslt http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/eisner-100~_show-overviewBroadcasts.html
 
   http://www.w3.org/TR/xslt
   http://www.w3.org/TR/xpath/#function-substring
@@ -38,8 +38,8 @@
     xmlns:dctype="http://purl.org/dc/dcmitype/"
     xmlns:movieontology="http://www.movieontology.org/2009/10/01/movieontology.owl#"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#"
-    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#"
+    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/#"
+    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/#"
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="date"
     exclude-result-prefixes="xsl date"

@@ -25,7 +25,7 @@
   get RDF about Tatort episodes index with episode numbering added.
 
 
-  $ xsltproc -html daserste.de.index.xslt http://www.daserste.de/unterhaltung/krimi/tatort/sendung/index.html
+  $ xsltproc -html daserste.de.index.xslt http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/index.html
 
   http://www.w3.org/TR/xslt
   http://www.w3.org/TR/xpath/#function-substring
@@ -38,8 +38,8 @@
     xmlns:dctype="http://purl.org/dc/dcmitype/"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#"
-    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#"
+    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/#"
+    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/#"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="date str"
@@ -48,7 +48,8 @@
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:template match="/">
-    <rdf:RDF xml:base="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/">
+    <rdf:RDF xml:base="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/">
+    	<!-- missing: http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/2008/die-pruefung-100.html -->
       <xsl:for-each select=".//select[@id='filterBoxDate']//option[position() &gt; 1]">
         <!-- skip first entry -->
         <xsl:variable name="episode" select="format-number(last() - position() + 1, '0000')"/>
@@ -68,7 +69,7 @@
       </xsl:for-each>
 
       <xsl:for-each select=".//select[@id='filterBoxGroup']//option[position() &gt; 1]">
-        <dctype:Text rdf:about="../kommissare/{@value}.html">
+        <dctype:Text rdf:about="../ermittler/{@value}.html">
           <xsl:variable name="s0">
             <xsl:choose>
               <xsl:when test="substring-before(.,'(') != ''">
@@ -84,7 +85,7 @@
           </xsl:for-each>
           <dcterms:identifier><xsl:value-of select="@value"/></dcterms:identifier>
           <dcterms:title xml:lang="de"><xsl:value-of select="."/></dcterms:title>
-          <dcterms:references rdf:resource="../kommissare/{@value}~_show-overviewBroadcasts.html"/>
+          <dcterms:references rdf:resource="../ermittler/{@value}~_show-overviewBroadcasts.html"/>
         </dctype:Text>
       </xsl:for-each>
 

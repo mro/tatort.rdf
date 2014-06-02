@@ -43,8 +43,8 @@
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:movieontology="http://www.movieontology.org/2009/10/01/movieontology.owl#"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#"
-    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#"
+    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/#"
+    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/#"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:dyn="http://exslt.org/dynamic"
     xmlns:str="http://exslt.org/strings"
@@ -125,7 +125,7 @@
                 <movie:character>
                   <movie:character>
                     <foaf:name><xsl:value-of select="normalize-space(td[1])"/></foaf:name>
-                    <!-- foaf:page rdf:resource="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#kressin"/ -->
+                    <!-- foaf:page rdf:resource="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/ermittler/#kressin"/ -->
                   </movie:character>
                 </movie:character>
                 <movie:actor>

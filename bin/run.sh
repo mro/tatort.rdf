@@ -45,7 +45,7 @@ cache_episode="$cache_root/episode"
 cache_kommissar="$cache_root/kommissar"
 cache_schedule="$cache_root/schedule"
 
-base_url="http://www.daserste.de/unterhaltung/krimi/tatort"
+base_url="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110"
 
 ##########################################################
 ## scrape episode list
@@ -102,11 +102,11 @@ then
   rm "$cache_kommissar"/*
   roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read komm_id
   do
-    komm_url="$base_url/kommissare/$komm_id~_show-overviewBroadcasts.html"
+    komm_url="$base_url/ermittler/$komm_id~_show-overviewBroadcasts.html"
     komm_file="$cache_kommissar/$komm_id"
 
-    echo xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url"
-    xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url" 2> /dev/null
+    echo xsltproc --stringparam base_url "$base_url/ermittler/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url"
+    xsltproc --stringparam base_url "$base_url/ermittler/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url" 2> /dev/null
 
     rapper --quiet --input rdfxml --output turtle --input-uri "$komm_url" --output-uri - "$komm_file".rdf > "$komm_file".ttl
     rm "$komm_file".rdf
