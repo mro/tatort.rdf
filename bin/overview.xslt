@@ -49,10 +49,25 @@
 
   <xsl:template match="/">
     <rdf:RDF xml:base="http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/">
-    	<!-- missing: http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/2008/die-pruefung-100.html -->
+      <!-- missing: 267 http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/2008/die-pruefung-100.html -->
+			<dctype:MovingImage rdf:about="#episode-{267}">
+				<dcterms:title xml:lang="de">Die Prüfung</dcterms:title>
+				<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2005-07-03</dcterms:issued>
+				<dcterms:alternative rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">267</dcterms:alternative>
+				<dcterms:identifier>2008/die-pruefung-100</dcterms:identifier>
+				<dcterms:source rdf:resource="2008/die-pruefung-100.html"/>
+			</dctype:MovingImage>
       <xsl:for-each select=".//select[@id='filterBoxDate']//option[position() &gt; 1]">
         <!-- skip first entry -->
-        <xsl:variable name="episode" select="format-number(last() - position() + 1, '0000')"/>
+        <xsl:variable name="epi_wrong" select="last() - position() + 1"/>
+        <xsl:variable name="epi_right">
+          <xsl:choose>
+            <xsl:when test="$epi_wrong &lt;= 266"><xsl:value-of select="$epi_wrong"/></xsl:when>
+            <!-- missing: 267 http://www.daserste.de/unterhaltung/krimi/polizeiruf-110/sendung/2008/die-pruefung-100.html -->
+            <xsl:otherwise><xsl:value-of select="$epi_wrong + 1"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="episode" select="format-number($epi_right, '0000')"/>
         <xsl:variable name="title" select="normalize-space(substring-after(.,':'))"/>
         <xsl:variable name="date_de" select="str:split(normalize-space(substring-before(.,':')),'.')"/>
         <xsl:variable name="issued">
