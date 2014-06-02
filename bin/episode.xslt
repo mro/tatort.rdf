@@ -149,27 +149,31 @@
             </xsl:if>
           </movie:production_company>
           <xsl:for-each select=".//table[2]//tr[td]">
-            <xsl:variable name="crew_task" select="normalize-space(td[1])"/>
+            <xsl:variable name="crew_task" select="normalize-space(translate(td[1], ':', ' '))"/>
             <xsl:variable name="crew_member" select="normalize-space(td[2])"/>
             <xsl:variable name="elm_qnames">
               <xsl:choose>
-                <xsl:when test="$crew_task = 'Regie:'">director</xsl:when>
-                <xsl:when test="$crew_task = 'Buch und Regie:'">director,story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Regie und Musik:'">director,music_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Ausstattung: J:'">film_set_designer</xsl:when>
-                <xsl:when test="$crew_task = 'Ausstattung:'">film_set_designer</xsl:when>
-                <xsl:when test="$crew_task = 'Szenenbild:'">film_set_designer</xsl:when>
-                <xsl:when test="$crew_task = 'Schnitt:'">editor</xsl:when>
-                <xsl:when test="$crew_task = 'Autor:'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Drehbuch:'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Drehbuchbearbeitung:'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Idee:'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Buch :'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Buch:'">story_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Kamera:'">cinematographer</xsl:when>
-                <xsl:when test="$crew_task = 'Musik:'">music_contributor</xsl:when>
-                <xsl:when test="$crew_task = 'Produktionsleitung:'">producer</xsl:when>
-                <xsl:when test="$crew_task = 'Kostüme:'">film_costume_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Puppenspiel, Bühne, Figuren'"></xsl:when>
+                <xsl:when test="$crew_task = 'Regie'">director</xsl:when>
+                <xsl:when test="$crew_task = 'Regie und Drehbuch'">director,story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Regie und Buch'">director,story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Buch und Regie'">director,story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Regie und Musik'">director,music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Kamera und Musik'">cinematographer,music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Regie und Kamera'">director,cinematographer</xsl:when>
+                <xsl:when test="$crew_task = 'Ausstattung J'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Ausstattung'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Szenenbild'">film_set_designer</xsl:when>
+                <xsl:when test="$crew_task = 'Schnitt'">editor</xsl:when>
+                <xsl:when test="$crew_task = 'Autor'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Drehbuch'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Drehbuchbearbeitung'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Idee'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Buch'">story_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Kamera'">cinematographer</xsl:when>
+                <xsl:when test="$crew_task = 'Musik'">music_contributor</xsl:when>
+                <xsl:when test="$crew_task = 'Produktionsleitung'">producer</xsl:when>
+                <xsl:when test="$crew_task = 'Kostüme'">film_costume_designer</xsl:when>
                 <xsl:otherwise><xsl:message>Unknown Crew: <xsl:value-of select="td[1]"/> in <xsl:value-of select="$base_url"/></xsl:message></xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
