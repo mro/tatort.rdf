@@ -51,7 +51,19 @@
     <rdf:RDF xml:base="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/">
       <xsl:for-each select=".//select[@id='filterBoxDate']//option[position() &gt; 1]">
         <!-- skip first entry -->
-        <xsl:variable name="episode" select="format-number(last() - position() + 1, '0000')"/>
+        <xsl:variable name="episode0" select="last() - position() + 1"/>
+        <!-- episode 857 (Scheinwelten) missing on website -->
+        <xsl:variable name="episode1">
+          <xsl:choose>
+            <xsl:when test="$episode0 &gt; 856">
+              <xsl:value-of select="$episode0 + 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$episode0"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="episode" select="format-number($episode1, '0000')"/>
         <xsl:variable name="title" select="normalize-space(substring-after(.,':'))"/>
         <xsl:variable name="date_de" select="str:split(normalize-space(substring-before(.,':')),'.')"/>
         <xsl:variable name="issued">
