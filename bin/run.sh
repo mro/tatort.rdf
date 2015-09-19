@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2013-2014, Marcus Rohrmoser mobile Software
+# Copyright (c) 2013-2015, Marcus Rohrmoser mobile Software
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -61,17 +61,13 @@ xsltproc --html --output "$dst_overview".rdf overview.xslt $base_url/sendung/ind
 ##########################################################
 
 mkdir -p "$cache_episode" 2>/dev/null
-roqet episode.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read line
+IFS=,
+roqet episode.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read episode_num episode_url
 do
-  episode_num=$(echo $line | cut -d , -f1)
-  episode_url=$(echo $line | cut -d , -f2)
-
   episode_file="$cache_episode/$(printf '%04d' $episode_num)"
 
-  if [ -f "$episode_file".ttl ] ; then
-    # already present, nothing to do
-    continue
-  fi
+	# already present, nothing to do
+  [ ! -f "$episode_file".ttl ] || continue
 
   echo xsltproc --stringparam episode "$(printf '%04d' $episode_num)" --stringparam base_url "$episode_url" --html --output "$episode_file".rdf episode.xslt "$episode_url"
   xsltproc --stringparam episode "$(printf '%04d' $episode_num)" --stringparam base_url "$episode_url" --html --output "$episode_file".rdf episode.xslt "$episode_url" 2> .log~
@@ -80,6 +76,7 @@ do
   rapper --input rdfxml --output turtle --input-uri "$episode_url" --output-uri - "$episode_file".rdf > "$episode_file".ttl
   rm "$episode_file".rdf
 done
+
 # consolidate into 1 single file
 mkdir -p "$(dirname "$dst_episode")" 2>/dev/null
 cat "$cache_episode"/*.ttl > "$dst_episode".ttl~ \
@@ -92,32 +89,35 @@ cat "$cache_episode"/*.ttl > "$dst_episode".ttl~ \
 ##########################################################
 
 
-##########################################################
-## scrape detetives <-> episode relations (only if needed)
-##########################################################
-
-if [ ! -f "$dst_kommissar".rdf ] || [ $(roqet episodes-without-kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_episode".rdf --data "$dst_kommissar".rdf | tr -d \\r | wc -l) -gt 1 ]
-then
-  mkdir -p "$cache_kommissar" 2>/dev/null
-  rm "$cache_kommissar"/*
-  roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read komm_id
-  do
-    komm_url="$base_url/kommissare/$komm_id~_show-overviewBroadcasts.html"
-    komm_file="$cache_kommissar/$komm_id"
-
-    echo xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url"
-    xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url" 2> /dev/null
-
-    rapper --quiet --input rdfxml --output turtle --input-uri "$komm_url" --output-uri - "$komm_file".rdf > "$komm_file".ttl
-    rm "$komm_file".rdf
-  done
-
-  # consolidate into 1 single file
-  mkdir -p "$(dirname "$dst_kommissar")" 2>/dev/null
-  cat "$cache_kommissar"/*.ttl > "$dst_kommissar".ttl~ \
-  && rapper --input turtle --output rdfxml-abbrev "$dst_kommissar".ttl~ > "$dst_kommissar".rdf \
-  && rm "$dst_kommissar".ttl~
-fi
+# ##########################################################
+# ## scrape detetives <-> episode relations (only if needed)
+# ##########################################################
+# 
+# ls -l "$dst_kommissar".rdf
+# echo "$ roqet episodes-without-kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_episode".rdf --data "$dst_kommissar".rdf | tr -d \\r | wc -l"
+# 
+# if [ ! -f "$dst_kommissar".rdf ] || [ $(roqet episodes-without-kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_episode".rdf --data "$dst_kommissar".rdf | tr -d \\r | wc -l) -gt 1 ]
+# then
+#   mkdir -p "$cache_kommissar" 2>/dev/null
+#   rm "$cache_kommissar"/*
+#   roqet kommissar.rq --results csv --input sparql --format rdfxml --data "$dst_overview".rdf | tr -d \\r | tail -n +2 | while read komm_id
+#   do
+#     komm_url="$base_url/kommissare/$komm_id~_show-overviewBroadcasts.html"
+#     komm_file="$cache_kommissar/$komm_id"
+# 
+#     echo xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url"
+#     xsltproc --stringparam base_url "$base_url/kommissare/$komm_id.html" --html --output "$komm_file".rdf kommissar.xslt "$komm_url" 2> /dev/null
+# 
+#     rapper --quiet --input rdfxml --output turtle --input-uri "$komm_url" --output-uri - "$komm_file".rdf > "$komm_file".ttl
+#     rm "$komm_file".rdf
+#   done
+# 
+#   # consolidate into 1 single file
+#   mkdir -p "$(dirname "$dst_kommissar")" 2>/dev/null
+#   cat "$cache_kommissar"/*.ttl > "$dst_kommissar".ttl~ \
+#   && rapper --input turtle --output rdfxml-abbrev "$dst_kommissar".ttl~ > "$dst_kommissar".rdf \
+#   && rm "$dst_kommissar".ttl~
+# fi
 
 make
 rm "$www_root/"*.ttl "$www_root/total"*
