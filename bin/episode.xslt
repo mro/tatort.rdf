@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2013-2014, Marcus Rohrmoser mobile Software
+  Copyright (c) 2013-2015, Marcus Rohrmoser mobile Software
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -74,12 +74,12 @@
       <dctype:Text rdf:about="{$base_url}">
         <xsl:for-each select=".//div[@id='content']//div[@class='box' and h1]">
           <!-- Legal -->
-          <dc:rights><xsl:value-of select="/html/head/meta[@name='DC.Copyright']/@content"/></dc:rights>
-          <dc:publisher><xsl:value-of select="/html/head/meta[@name='DC.Publisher']/@content"/></dc:publisher>
-          <dcterms:rightsHolder><xsl:value-of select="/html/head/meta[@name='DC.Author']/@content"/></dcterms:rightsHolder>
+          <dc:rights><xsl:value-of select="/html/head/meta[@name='copyright']/@content"/></dc:rights>
+          <dc:publisher><xsl:value-of select="/html/head/meta[@name='publisher']/@content"/></dc:publisher>
+          <dcterms:rightsHolder><xsl:value-of select="/html/head/meta[@name='owner']/@content"/></dcterms:rightsHolder>
           <!-- Basics -->
           <dcterms:title xml:lang="{$lang}"><xsl:value-of select="h1"/></dcterms:title>
-          <dcterms:abstract xml:lang="{$lang}"><xsl:value-of select="/html/head/meta[@name='DC.Description']/@content"/></dcterms:abstract>
+          <dcterms:abstract xml:lang="{$lang}"><xsl:value-of select="/html/head/meta[@property='og:description']/@content"/></dcterms:abstract>
           <xsl:for-each select="$image_nodes[1]">
             <!-- only first -->
             <dcterms:references rdf:resource="{.}"/>
