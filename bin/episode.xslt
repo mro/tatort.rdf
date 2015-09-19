@@ -43,8 +43,6 @@
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
     xmlns:movieontology="http://www.movieontology.org/2009/10/01/movieontology.owl#"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:taep="http://www.daserste.de/unterhaltung/krimi/tatort/sendung/#"
-    xmlns:tako="http://www.daserste.de/unterhaltung/krimi/tatort/kommissare/#"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:dyn="http://exslt.org/dynamic"
     xmlns:str="http://exslt.org/strings"
@@ -69,6 +67,16 @@
         <dctype:StillImage rdf:about="{.}">
           <dcterms:isReferencedBy rdf:resource="{$base_url}"/>
         </dctype:StillImage>
+      </xsl:for-each>
+
+      <!-- Link episode <-> investigator(s) -->
+      <xsl:for-each select=".//*[contains(@class,'sectionC')]//*[contains(@class,'boxCon')]//a[contains(@href,'/kommissare/') and not( contains(@href,'~_show-overviewBroadcasts') )]">
+        <rdf:Description rdf:about="{$base_url}">
+          <dcterms:isPartOf rdf:resource="{@href}"/>
+        </rdf:Description>
+        <rdf:Description rdf:about="{@href}">
+          <dcterms:hasPart rdf:resource="{$base_url}"/>
+        </rdf:Description>
       </xsl:for-each>
 
       <dctype:Text rdf:about="{$base_url}">
