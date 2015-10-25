@@ -54,7 +54,8 @@
         <xsl:variable name="episode0" select="last() - position() + 1"/>
         <xsl:variable name="episode1">
           <xsl:choose>
-            <xsl:when test="1=0">
+            <xsl:when test="$episode0 &gt; 903">
+              <xsl:value-of select="$episode0 - 1"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$episode0"/>
