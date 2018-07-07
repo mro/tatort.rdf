@@ -2,6 +2,7 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns="http://usefulinc.com/ns/doap#">
   <Project>
+    <homepage rdf:resource="http://tatort.rdf.mro.name/"/>
     <bug-database rdf:resource="https://gogs.mro.name/mro/tatort.rdf/issues"/>
     <license rdf:resource="https://gogs.mro.name/mro/tatort.rdf/raw/master/LICENSE"/>
     <maintainer rdf:resource="http://mro.name/~me"/>
